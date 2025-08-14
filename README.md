@@ -1,4 +1,4 @@
-Frontend - Cotação de Moedas (React)
+# Frontend - Cotação de Moedas (React)
 
 Interface web desenvolvida em React como parte de um desafio técnico para vaga de desenvolvedor júnior. A aplicação exibe a cotação do Dólar em tempo real, consumindo uma API backend em .NET.
 

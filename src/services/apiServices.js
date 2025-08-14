@@ -1,6 +1,6 @@
-const API_URL = 'http://localhost:5053';
+const API_URL = import.meta.env.VITE_API_URL;
 
-const API_TOKEN = 'meu-token-super-secreto-para-o-desafio';
+const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 
 export const getQuote = async () => {
     const headers = {

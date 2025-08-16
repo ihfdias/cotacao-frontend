@@ -1,20 +1,21 @@
-import { useState, useEffect } from 'react';
-import { login, getQuote } from './services/apiServices.js';
+import { useState, useEffect, useCallback } from 'react';
+import { login, getQuote } from './services/apiService.js';
+import { isWorkingDay } from './services/dateService.js';
 import './App.css';
 
-
+// --- Componente para o Formulário de Login ---
 function LoginForm({ onLoginSuccess, setGlobalError }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     setIsLoading(true);
-    setGlobalError(null); 
+    setGlobalError(null);
     try {
       const receivedToken = await login(username, password);
-      onLoginSuccess(receivedToken); 
+      onLoginSuccess(receivedToken);
     } catch (error) {
       setGlobalError(error.message);
       setIsLoading(false);
@@ -41,13 +42,13 @@ function LoginForm({ onLoginSuccess, setGlobalError }) {
   );
 }
 
-
+// --- Componente para Exibir a Cotação ---
 function QuoteDashboard({ onLogout }) {
   const [cotacao, setCotacao] = useState(null);
   const [erro, setErro] = useState(null);
   const [carregando, setCarregando] = useState(true);
 
-  const buscarCotacao = async () => {
+  const buscarCotacao = useCallback(async () => {
     setCarregando(true);
     try {
       const data = await getQuote();
@@ -56,23 +57,33 @@ function QuoteDashboard({ onLogout }) {
         setErro(null);
       } else {
         setCotacao(null);
-        setErro("Não há cotação para hoje (fim de semana ou feriado).");
+        setErro("Cotação não disponível no momento.");
       }
     } catch (error) {
       setErro(error.message);
-      if (error.message.includes('401')) { 
+      if (error.message.includes('401')) {
         onLogout();
       }
     } finally {
       setCarregando(false);
     }
-  };
+  }, [onLogout]);
 
   useEffect(() => {
-    buscarCotacao();
-    const intervalId = setInterval(buscarCotacao, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+    const startQuoteService = async () => {
+      const todayIsWorkingDay = await isWorkingDay();
+      if (todayIsWorkingDay) {
+        buscarCotacao();
+        const intervalId = setInterval(buscarCotacao, 5000);
+        return () => clearInterval(intervalId);
+      } else {
+        setErro("Não há cotação para hoje (fim de semana ou feriado).");
+        setCarregando(false);
+      }
+    };
+
+    startQuoteService();
+  }, [buscarCotacao]);
 
   return (
     <div className="card">
@@ -94,7 +105,6 @@ function QuoteDashboard({ onLogout }) {
     </div>
   );
 }
-
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('authToken'));

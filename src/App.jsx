@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { login, getQuote } from './services/apiService.js';
+import { login, getQuote } from './services/apiServices.js';
 import { isWorkingDay } from './services/dateService.js';
 import './App.css';
 

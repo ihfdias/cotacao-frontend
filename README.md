@@ -43,13 +43,6 @@ A aplicação consome uma **API backend em .NET** para exibir a cotação do **D
 - **Node.js (versão LTS)** instalado  
 - O **backend (API)** deve estar rodando localmente
 
-### ⚡ Instalação e Execução
-
-1. **Clone o repositório**
-   ```bash
-   git clone https://github.com/ihfdias/cotacao-frontend.git
-
-
 ### Instalação e Execução
 
 1.  **Clone o repositório:**

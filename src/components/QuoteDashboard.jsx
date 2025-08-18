@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getQuote } from '../services/apiServics.js';
+import { getQuote } from '../services/apiService.js';
 import { isWorkingDay } from '../services/dateService.js';
 
 function QuoteDashboard({ onLogout }) {

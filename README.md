@@ -1,7 +1,9 @@
 # 💻 Frontend - Cotação de Moedas (React com JWT)
 
 Interface web desenvolvida em **React** como parte de um desafio técnico para vaga de desenvolvedor júnior.  
-A aplicação consome uma **API backend em .NET** para exibir a cotação do **Dólar em tempo real**, implementando um fluxo de **autenticação JWT** e uma lógica de **atualização inteligente**.
+A aplicação consome uma **API backend em .NET** para exibir a cotação do **Dólar em tempo real**, implementando um fluxo de **autenticação JWT** e uma lógica de **atualização inteligente**.  
+
+O código segue as **melhores práticas da indústria**, incluindo a padronização de variáveis e funções em **inglês**.
 
 ---
 
@@ -12,10 +14,13 @@ A aplicação consome uma **API backend em .NET** para exibir a cotação do **D
   A sessão do usuário é persistida no **localStorage**.
 
 - **Atualização Inteligente**  
-  Auto-refresh a cada **5 segundos**, ativado apenas em dias úteis.
+  Auto-refresh a cada **5 segundos**, ativado apenas em dias úteis e após o início do pregão.
 
 - **Verificação de Feriados**  
   A aplicação consome a **BrasilAPI** para buscar a lista de feriados nacionais e desativa as atualizações nesses dias, informando o usuário.
+
+- **Componentização**  
+  O código foi refatorado em **componentes reutilizáveis** (`LoginForm`, `QuoteDashboard`), melhorando a organização e a manutenção.
 
 - **Feedback de UX**  
   A UI informa o usuário sobre o status de **"Carregando..."**, trata e exibe erros de forma amigável e mostra mensagens claras em dias não úteis.
@@ -28,7 +33,7 @@ A aplicação consome uma **API backend em .NET** para exibir a cotação do **D
 ## 🚀 Tecnologias Utilizadas
 
 - **React**  
-- **Vite** como ferramenta de build e servidor de desenvolvimento  
+- **Vite** (ferramenta de build e servidor de desenvolvimento)  
 - **JavaScript (ES6+)**  
 - **CSS3**  
 - **React Hooks**: `useState`, `useEffect`, `useCallback`  
@@ -43,12 +48,12 @@ A aplicação consome uma **API backend em .NET** para exibir a cotação do **D
 - **Node.js (versão LTS)** instalado  
 - O **backend (API)** deve estar rodando localmente
 
-### Instalação e Execução
+### ⚡ Instalação e Execução
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/ihfdias/cotacao-frontend.git](https://github.com/ihfdias/cotacao-frontend.git)
-    ```
+1. **Clone o repositório**
+   ```bash
+   git clone https://github.com/ihfdias/cotacao-frontend.git
+   ```
 2.  **Navegue até a pasta do projeto:**
     ```bash
     cd cotacao-frontend

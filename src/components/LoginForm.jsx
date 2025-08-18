@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { login } from '../services/apiService.js';
 
 function LoginForm({ onLoginSuccess, setGlobalError }) {
   const [username, setUsername] = useState('admin');
@@ -9,8 +10,7 @@ function LoginForm({ onLoginSuccess, setGlobalError }) {
     event.preventDefault();
     setIsLoading(true);
     setGlobalError(null);
-    try {
-      const { login } = await import('../services/apiService.js');
+    try {      
       const receivedToken = await login(username, password);
       onLoginSuccess(receivedToken);
     } catch (error) {

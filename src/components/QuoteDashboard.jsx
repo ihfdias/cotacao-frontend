@@ -3,23 +3,23 @@ import { getQuote } from '../services/apiService.js';
 import { isWorkingDay } from '../services/dateService.js';
 
 function QuoteDashboard({ onLogout }) {
-  const [cotacao, setCotacao] = useState(null);
-  const [erro, setErro] = useState(null);
-  const [carregando, setCarregando] = useState(true);
-  const [statusMessage, setStatusMessage] = useState("Verificando status do mercado...");
+  const [quote, setQuote] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [statusMessage, setStatusMessage] = useState("Checking market status...");
 
-  const buscarCotacao = useCallback(async () => {
+  const fetchQuote = useCallback(async () => {
     try {
       const data = await getQuote();
       if (data.value && data.value.length > 0) {
-        setCotacao(data.value[0]);
-        setErro(null);
+        setQuote(data.value[0]);
+        setError(null);
         return true;
       }
       return false;
-    } catch (error) {
-      setErro(error.message);
-      if (error.message.includes('401')) {
+    } catch (err) {
+      setError(err.message);
+      if (err.message.includes('401')) {
         onLogout();
       }
       return false;
@@ -33,28 +33,28 @@ function QuoteDashboard({ onLogout }) {
     const startSmartService = async () => {
       const todayIsWorkingDay = await isWorkingDay();
       if (todayIsWorkingDay) {
-        setCarregando(true);
-        setStatusMessage("Aguardando abertura do mercado...");
+        setIsLoading(true);
+        setStatusMessage("Awaiting market opening...");
         
-        const success = await buscarCotacao();
-        setCarregando(false);
+        const success = await fetchQuote();
+        setIsLoading(false);
 
         if (success) {
           setStatusMessage(null);
-          pollingIntervalId = setInterval(buscarCotacao, 5000);
+          pollingIntervalId = setInterval(fetchQuote, 5000);
         } else {
           waitingIntervalId = setInterval(async () => {
-            const foundQuote = await buscarCotacao();
+            const foundQuote = await fetchQuote();
             if (foundQuote) {
               clearInterval(waitingIntervalId);
               setStatusMessage(null);
-              pollingIntervalId = setInterval(buscarCotacao, 5000);
+              pollingIntervalId = setInterval(fetchQuote, 5000);
             }
           }, 60000);
         }
       } else {
-        setErro("Não há cotação para hoje (fim de semana ou feriado).");
-        setCarregando(false);
+        setError("No quote available today (weekend or holiday).");
+        setIsLoading(false);
       }
     };
 
@@ -64,22 +64,22 @@ function QuoteDashboard({ onLogout }) {
       clearInterval(pollingIntervalId);
       clearInterval(waitingIntervalId);
     };
-  }, [buscarCotacao]);
+  }, [fetchQuote]);
 
   return (
     <div className="card">
-      <button onClick={onLogout} className="logout-button">Sair</button>
-      <h1>Cotação do Dólar</h1>
+      <button onClick={onLogout} className="logout-button">Logout</button>
+      <h1>Dollar Quote</h1>
       
-      {carregando && <p>{statusMessage}</p>}
-      {erro && <p className="error-message">{erro}</p>}
-      {!carregando && !erro && !cotacao && <p className="error-message">Aguardando a primeira cotação do dia...</p>}
+      {isLoading && <p>{statusMessage}</p>}
+      {error && <p className="error-message">{error}</p>}
+      {!isLoading && !error && !quote && <p className="error-message">Awaiting the first quote of the day...</p>}
       
-      {cotacao && (
+      {quote && (
         <>
-          <h2>Compra: R$ {cotacao.cotacaoCompra}</h2>
-          <h2>Venda: R$ {cotacao.cotacaoVenda}</h2>
-          <p>Atualizado em: {new Date(cotacao.dataHoraCotacao).toLocaleString('pt-BR')}</p>
+          <h2>Buy: R$ {quote.cotacaoCompra}</h2>
+          <h2>Sell: R$ {quote.cotacaoVenda}</h2>
+          <p>Updated at: {new Date(quote.dataHoraCotacao).toLocaleString('pt-BR')}</p>
         </>
       )}
     </div>

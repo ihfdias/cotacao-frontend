@@ -77,9 +77,9 @@ function QuoteDashboard({ onLogout }) {
       
       {quote && (
         <>
-          <h2>Buy: R$ {quote.cotacaoCompra}</h2>
-          <h2>Sell: R$ {quote.cotacaoVenda}</h2>
-          <p>Updated at: {new Date(quote.dataHoraCotacao).toLocaleString('pt-BR')}</p>
+          <h2>Compra: R$ {quote.cotacaoCompra}</h2>
+          <h2>Venda: R$ {quote.cotacaoVenda}</h2>
+          <p>Atualizado em: {new Date(quote.dataHoraCotacao).toLocaleString('pt-BR')}</p>
         </>
       )}
     </div>

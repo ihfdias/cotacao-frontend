@@ -6,7 +6,7 @@ function QuoteDashboard({ onLogout }) {
   const [quote, setQuote] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [statusMessage, setStatusMessage] = useState("Checking market status...");
+  const [statusMessage, setStatusMessage] = useState("Verificando o status do mercado...");
 
   const fetchQuote = useCallback(async () => {
     try {
@@ -34,7 +34,7 @@ function QuoteDashboard({ onLogout }) {
       const todayIsWorkingDay = await isWorkingDay();
       if (todayIsWorkingDay) {
         setIsLoading(true);
-        setStatusMessage("Awaiting market opening...");
+        setStatusMessage("Aguardando abertura do mercado...");
         
         const success = await fetchQuote();
         setIsLoading(false);
@@ -53,7 +53,7 @@ function QuoteDashboard({ onLogout }) {
           }, 60000);
         }
       } else {
-        setError("No quote available today (weekend or holiday).");
+        setError("Nenhuma cotação disponível hoje (fim de semana ou feriado).");
         setIsLoading(false);
       }
     };
@@ -69,11 +69,11 @@ function QuoteDashboard({ onLogout }) {
   return (
     <div className="card">
       <button onClick={onLogout} className="logout-button">Logout</button>
-      <h1>Dollar Quote</h1>
+      <h1>Cotação do dólar</h1>
       
       {isLoading && <p>{statusMessage}</p>}
       {error && <p className="error-message">{error}</p>}
-      {!isLoading && !error && !quote && <p className="error-message">Awaiting the first quote of the day...</p>}
+      {!isLoading && !error && !quote && <p className="error-message">Aguardando a primeira cotação do dia...</p>}
       
       {quote && (
         <>
